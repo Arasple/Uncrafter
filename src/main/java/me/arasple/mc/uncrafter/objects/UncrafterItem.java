@@ -16,9 +16,15 @@ import java.util.List;
 public class UncrafterItem {
 
     private static final String UNCRAFTER_SIGN = "§0UNCRAFTER_ITEM";
+    private static boolean newVersion;
 
-    public static String getUncrafterSign() {
-        return UNCRAFTER_SIGN;
+    static {
+        try {
+            Material.valueOf("SKULL");
+            newVersion = false;
+        } catch (Exception e) {
+            newVersion = true;
+        }
     }
 
     private Material material;
@@ -45,6 +51,28 @@ public class UncrafterItem {
         }
     }
 
+    public static String getUncrafterSign() {
+        return UNCRAFTER_SIGN;
+    }
+
+    private static Material getMaterial(String material) {
+        Material mat;
+        try {
+            mat = Material.valueOf(material);
+        } catch (Exception e) {
+            mat = getDefaultMaterial();
+        }
+        return mat;
+    }
+
+    private static Material getDefaultMaterial() {
+        return newVersion ? Material.valueOf("PLAYER_HEAD") : Material.valueOf("SKULL");
+    }
+
+    public static boolean isNewVersion() {
+        return newVersion;
+    }
+
     public ItemStack getItem() {
         return cache != null ? cache : buildItem();
     }
@@ -66,35 +94,6 @@ public class UncrafterItem {
 
     public boolean isSneaking() {
         return sneaking;
-    }
-
-    private static boolean newVersion;
-
-    static {
-        try {
-            Material.valueOf("SKULL");
-            newVersion = false;
-        } catch (Exception e) {
-            newVersion = true;
-        }
-    }
-
-    private static Material getMaterial(String material) {
-        Material mat;
-        try {
-            mat = Material.valueOf(material);
-        } catch (Exception e) {
-            mat = getDefaultMaterial();
-        }
-        return mat;
-    }
-
-    private static Material getDefaultMaterial() {
-        return newVersion ? Material.valueOf("PLAYER_HEAD") : Material.valueOf("SKULL");
-    }
-
-    public static boolean isNewVersion() {
-        return newVersion;
     }
 
 }

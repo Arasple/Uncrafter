@@ -2,8 +2,8 @@ package me.arasple.mc.uncrafter.listeners;
 
 import io.izzel.taboolib.module.inject.TListener;
 import me.arasple.mc.uncrafter.Uncrafter;
-import me.arasple.mc.uncrafter.objects.UncrafterMenu;
 import me.arasple.mc.uncrafter.objects.UncrafterItem;
+import me.arasple.mc.uncrafter.objects.UncrafterMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

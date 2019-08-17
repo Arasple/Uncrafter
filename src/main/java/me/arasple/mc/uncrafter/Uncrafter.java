@@ -22,21 +22,6 @@ public final class Uncrafter extends Plugin {
     @TInject("settings.yml")
     private static TConfig settings;
 
-    @Override
-    public void onStarting() {
-        instance = this;
-        settings.listener(() -> {
-            loadUncrafterItem();
-            getTLogger().fine("&7重新载入配置...");
-        });
-        loadUncrafterItem();
-    }
-
-    @Override
-    public void onStopping() {
-
-    }
-
     public static TLogger getTLogger() {
         return logger;
     }
@@ -51,6 +36,21 @@ public final class Uncrafter extends Plugin {
 
     public static UncrafterItem getUncrafterItem() {
         return uncrafterItem;
+    }
+
+    @Override
+    public void onStarting() {
+        instance = this;
+        settings.listener(() -> {
+            loadUncrafterItem();
+            getTLogger().fine("&7重新载入配置...");
+        });
+        loadUncrafterItem();
+    }
+
+    @Override
+    public void onStopping() {
+
     }
 
     private void loadUncrafterItem() {

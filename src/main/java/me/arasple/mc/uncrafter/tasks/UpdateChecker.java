@@ -37,16 +37,6 @@ public class UpdateChecker implements Listener {
     private static String[] updatesMessages;
     private static boolean[] noticed = new boolean[]{false, false};
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-
-        if (!noticed[1] && hasNewerVersion && p.hasPermission("uncrafter.admin")) {
-            notifyUpdates(p);
-            noticed[1] = true;
-        }
-    }
-
     @TSchedule(delay = 20, period = 30 * 60 * 20, async = true)
     public static void onCheck() {
         if (!Uncrafter.getSettings().getBoolean("GENERAL.CHECK-UPDATE", true)) {
@@ -112,6 +102,16 @@ public class UpdateChecker implements Listener {
 
     public static String[] getUpdatesMessages() {
         return updatesMessages != null ? updatesMessages : new String[]{};
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+
+        if (!noticed[1] && hasNewerVersion && p.hasPermission("uncrafter.admin")) {
+            notifyUpdates(p);
+            noticed[1] = true;
+        }
     }
 
 }
