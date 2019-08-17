@@ -1,0 +1,49 @@
+UNCRAFT:
+  DROP-UNCRAFT:
+    - ==: ACTION
+      text: '&3&l已快捷分解物品为掉落物...'
+    - ==: SOUND
+      sound: 'BLOCK_NOTE_BLOCK_PLING-1-2'
+  SUCCESS:
+    - ==: TITLE
+      title: '&a&l分解成功'
+      subtitle: '&3&l已发放至你的背包'
+    - ==: SOUND
+      sound: 'BLOCK_NOTE_BLOCK_PLING-1-0'
+  INV-NO-ROOM:
+    - ==: TITLE
+      title: '&c&l分解失败'
+      subtitle: '&7&l你的背包可用空间不足'
+    - ==: ACTION
+      text: '&6需要空间: &a{0} &8/ &6剩余空间: &3{1}'
+    - ==: SOUND
+      sound: 'BLOCK_ANVIL_LAND-1-0'
+
+COMMANDS:
+  NOT-PLAYER: '&8[&6Uncrafter&8] &c你必须是一个玩家才能执行此操作.'
+
+UNCRAFTER-GUI:
+  TITLE: 'Uncrafter 分解系统'
+  OPEN:
+    ==: SOUND
+    sound: 'BLOCK_CHEST_OPEN-1-0'
+  CLOSE:
+    ==: SOUND
+    sound: 'BLOCK_CHEST_CLOSE-1-0'
+
+PLUGIN:
+  ENABLED: '&8[&6Uncrafter&8] &3启动成功. 当前运行版本: &aVersion {0}'
+  UPDATE-NOTIFY:
+    LATEST: '&8[&6Uncrafter&8] &a你正在运行最新版的 &6分解者&a.'
+    HEADER:
+      - ''
+      - ''
+      - ''
+      - '&3「&8&m--------------------------------------------------&3」'
+      - '&7» &3Uncrafter &6更新通知 &8v{0} &7-> &av{1}'
+      - ''
+      - '&7» &b更新内容'
+    FOOTER:
+      - ''
+      - '&7» &2Github下载: &a&nhttps://github.com/Arasple/Uncrafter/releases/latest'
+      - '&3「&8&m--------------------------------------------------&3」'

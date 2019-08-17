@@ -1,0 +1,67 @@
+##################################################
+#
+# 常规设置
+#
+##################################################
+GENERAL:
+  # 是否自动检测更新
+  CHECK-UPDATE: true
+
+##################################################
+#
+# "分解者" 移动GUI的物品
+#
+##################################################
+UNCREATER-ITEM:
+  # 物品材质
+  ID: PLAYER_HEAD
+  # 头颅材质 (仅限物品材质为头颅时有效)
+  # 推荐网址: https://minecraft-heads.com/custom-heads/decoration
+  SKULL-TEXTURE: 'eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmQ3NjFjYzE2NTYyYzg4ZDJmYmU0MGFkMzg1MDJiYzNiNGE4Nzg1OTg4N2RiYzM1ZjI3MmUzMGQ4MDcwZWVlYyJ9fX0='
+  # 显示名称
+  NAME: '§f分解者'
+  # LORE 描述
+  LORES:
+    - '§7这是 §3"分解者" §7背包,'
+    - '§7你可以用其来分解无用物品.'
+    - '§7蹲下右键一下即可打开!'
+  # 是否需要蹲下才能打开
+  SNEAKING-OPEN: true
+
+##################################################
+#
+# 快捷分解物品的骚操作
+# 玩家蹲下后 2s(可自定义) 内丢出的物品自动分解
+#
+##################################################
+UNCRAFT-SHORTCUT:
+  # 是否启用
+  ENABLE: true
+  # 限制时间 (单位: ticks [20 ticks = 1sec ])
+  TIME: 40
+
+##################################################
+#
+# 分解物品系统的相关设定
+#
+##################################################
+UNCRAFT:
+  # 分解的物品必须是满耐久 (推荐开启)
+  FULL-DURABILITY: true
+  # 是否允许分解带有自定义名称的物品
+  CUSTOM-NAME: true
+  # 附魔物品分解相关
+  ENCHANTED-ITEMS:
+    # 是否允许分解附魔物品
+    ALLOW: true
+    # 是否将附魔效果分解为附魔书归还
+    RETURN-ENCHANT-BOOKS: true
+  # 禁止分解的物品列表
+  BLACKLIST:
+    # 通过物品材质判断
+    MATERIALS:
+      - 'YOUR_MATERIAL'
+    # 通过物品的Lore判断 (包含)
+    LORES:
+      - '不可分解'
+      - '灵魂绑定'

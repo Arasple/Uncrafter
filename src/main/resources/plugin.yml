@@ -1,0 +1,7 @@
+name: Uncrafter
+main: me.arasple.mc.uncrafter.Uncrafter
+
+api-version: 1.13
+version: ${project.version}
+
+author: Arasple
