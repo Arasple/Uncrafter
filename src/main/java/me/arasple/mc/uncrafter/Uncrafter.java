@@ -3,6 +3,7 @@ package me.arasple.mc.uncrafter;
 import io.izzel.taboolib.module.config.TConfig;
 import io.izzel.taboolib.module.inject.TInject;
 import io.izzel.taboolib.module.locale.logger.TLogger;
+import me.arasple.mc.uncrafter.bstats.Metrics;
 import me.arasple.mc.uncrafter.objects.UncrafterItem;
 
 /**
@@ -41,11 +42,14 @@ public final class Uncrafter extends Plugin {
     @Override
     public void onStarting() {
         instance = this;
+
         settings.listener(() -> {
             loadUncrafterItem();
             getTLogger().fine("&7重新载入配置...");
         });
         loadUncrafterItem();
+
+        new Metrics(this);
     }
 
     @Override
