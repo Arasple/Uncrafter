@@ -6,7 +6,7 @@
 
     <groupId>me.arasple.mc</groupId>
     <artifactId>Uncrafter</artifactId>
-    <version>1.2</version>
+    <version>1.21</version>
     <packaging>jar</packaging>
 
     <name>Uncrafter</name>

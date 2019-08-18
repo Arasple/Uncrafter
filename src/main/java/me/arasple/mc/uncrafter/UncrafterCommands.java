@@ -61,10 +61,10 @@ public class UncrafterCommands extends BaseMainCommand {
 
     private void displayHelp(CommandSender sender) {
         sender.sendMessage("§6「§8§m--------------------------------------------------§6」");
-        sender.sendMessage();
+        sender.sendMessage("");
         sender.sendMessage("§8» §7/§6Uncrafter §eOpen §2打开分解系统GUI");
         sender.sendMessage("§8» §7/§6Uncrafter §eGet §2取得一个移动分解者GUI物品");
-        sender.sendMessage();
+        sender.sendMessage("");
         sender.sendMessage("§6「§8§m--------------------------------------------------§6」");
     }
 
