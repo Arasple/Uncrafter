@@ -1,17 +1,19 @@
 package me.arasple.mc.uncrafter.utils;
 
 import com.google.common.collect.Lists;
+import io.izzel.taboolib.module.inject.TSchedule;
+import io.izzel.taboolib.module.locale.TLocale;
 import me.arasple.mc.uncrafter.Uncrafter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -20,37 +22,56 @@ import java.util.stream.Collectors;
  */
 public class RecipesUtils {
 
-    public static List<ItemStack> uncraftItems(ItemStack... itemStacks) {
-        return uncraftItems(Arrays.asList(itemStacks));
+    private static HashMap<Material, Recipe> caches;
+
+    @TSchedule(delay = 1, async = true)
+    static void init() {
+        caches = new HashMap<>();
+        for (Material value : Material.values()) {
+            ItemStack example = new ItemStack(value, 1);
+            if (Bukkit.getRecipesFor(example).size() > 0) {
+                caches.put(value, Bukkit.getRecipesFor(example).stream().findFirst().orElse(null));
+            }
+        }
+        caches.entrySet().removeIf(x -> x.getValue() == null || x.getValue().getResult().getAmount() != 1);
+
+        TLocale.sendToConsole("PLUGIN.CACHED", caches.size());
     }
 
-    public static List<ItemStack> uncraftItems(List<ItemStack> itemStacks) {
+    public static List<ItemStack> uncraftItems(boolean uncraftEnchants, ItemStack... itemStacks) {
+        return uncraftItems(Arrays.asList(itemStacks), uncraftEnchants);
+    }
+
+    public static List<ItemStack> uncraftItems(List<ItemStack> itemStacks, boolean uncraftEnchants) {
         List<ItemStack> results = Lists.newArrayList();
 
         for (ItemStack itemStack : itemStacks) {
-            ItemStack copyer = new ItemStack(itemStack.getType(), itemStack.getAmount());
-
-            if (fitConditions(itemStack) && Bukkit.getRecipesFor(copyer).size() > 0) {
+            if (fitConditions(itemStack)) {
                 ItemMeta meta = itemStack.getItemMeta();
+                int amount = itemStack.getAmount();
+                Recipe recipe = caches.get(itemStack.getType());
 
-                if (meta.getEnchants().size() > 0 && Uncrafter.getSettings().getBoolean("UNCRAFT.ENCHANTED-ITEMS.RETURN-ENCHANT-BOOKS")) {
-                    meta.getEnchants().forEach((key, value) -> {
+                if (uncraftEnchants && meta.getEnchants().size() > 0 && Uncrafter.getSettings().getBoolean("UNCRAFT.ENCHANTED-ITEMS.RETURN-ENCHANT-BOOKS")) {
+                    for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
                         ItemStack enchatedBook = new ItemStack(Material.ENCHANTED_BOOK);
                         ItemMeta eMeta = enchatedBook.getItemMeta();
-                        eMeta.addEnchant(key, value, true);
+                        eMeta.addEnchant(entry.getKey(), entry.getValue(), true);
                         enchatedBook.setItemMeta(eMeta);
                         results.add(enchatedBook);
-                    });
+                    }
                 }
 
-                Recipe recipe = Bukkit.getRecipesFor(copyer).get(0);
                 if (recipe instanceof ShapedRecipe) {
-                    for (int i = 0; i < itemStack.getAmount(); i++) {
+                    for (int i = 0; i < amount; i++) {
                         results.addAll(((ShapedRecipe) recipe).getIngredientMap().values());
                     }
                 } else if (recipe instanceof ShapelessRecipe) {
-                    for (int i = 0; i < itemStack.getAmount(); i++) {
+                    for (int i = 0; i < amount; i++) {
                         results.addAll(((ShapelessRecipe) recipe).getIngredientList());
+                    }
+                } else if (recipe instanceof MerchantRecipe) {
+                    for (int i = 0; i < amount; i++) {
+                        results.addAll(((MerchantRecipe) recipe).getIngredients());
                     }
                 } else {
                     results.add(itemStack);
@@ -59,7 +80,10 @@ public class RecipesUtils {
                 results.add(itemStack);
             }
         }
-        return merge(results);
+
+        results = merge(results);
+//        results.forEach(x -> System.out.println("Uncraft " + Items.getName(itemStacks.get(0)) + "; Result: " + Items.getName(x)));
+        return results;
     }
 
     private static List<ItemStack> merge(List<ItemStack> results) {
@@ -73,7 +97,7 @@ public class RecipesUtils {
                 }
             }
         }
-        return results.stream().filter(x -> x != null && x.getType() != Material.AIR).collect(Collectors.toList());
+        return results.stream().filter(x -> x != null && x.getType() != Material.AIR && x.getAmount() > 0).collect(Collectors.toList());
     }
 
     private static boolean fitConditions(ItemStack itemStack) {
@@ -83,15 +107,12 @@ public class RecipesUtils {
         if (Uncrafter.getSettings().getBoolean("UNCRAFT.FULL-DURABILITY") && itemStack.getDurability() != 0) {
             return false;
         }
-
         if (Uncrafter.getSettings().getBoolean("UNCRAFT.CUSTOM-NAME") && itemStack.getItemMeta().hasDisplayName()) {
             return false;
         }
-
         if (!Uncrafter.getSettings().getBoolean("UNCRAFT.ENCHANTED-ITEMS.ALLOW") && itemStack.getEnchantments().size() > 0) {
             return false;
         }
-
         for (String s : Uncrafter.getSettings().getStringList("UNCRAFT.BLACKLIST.MATERIALS")) {
             if (s.equalsIgnoreCase(material)) {
                 return false;
@@ -107,8 +128,7 @@ public class RecipesUtils {
                 }
             }
         }
-
-        return true;
+        return caches.containsKey(itemStack.getType());
     }
 
 

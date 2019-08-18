@@ -1,12 +1,13 @@
 package me.arasple.mc.uncrafter.objects;
 
+import io.izzel.taboolib.cronus.CronusUtils;
 import io.izzel.taboolib.module.locale.TLocale;
 import io.izzel.taboolib.util.item.ItemBuilder;
 import io.izzel.taboolib.util.item.inventory.MenuBuilder;
+import io.izzel.taboolib.util.lite.Materials;
 import me.arasple.mc.uncrafter.Uncrafter;
 import me.arasple.mc.uncrafter.utils.InvUtils;
 import me.arasple.mc.uncrafter.utils.RecipesUtils;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -33,8 +34,8 @@ public class UncrafterMenu {
                                 "         ",
                                 "####Y####"
                         )
-                        .put('#', new ItemBuilder(MaterialVersion.getGlassPane("GRAY")).damage(7).name("§8Uncrafter").build())
-                        .put('Y', new ItemBuilder(MaterialVersion.getGlassPane("LIME")).damage(5).name("§a确认分解").lore("", "§c一旦确认分解，操作不可逆.", "", "§7系统将试图将你放进的物品", "§7还原成基础材料.").build())
+                        .put('#', new ItemBuilder(Materials.GRAY_STAINED_GLASS_PANE.parseMaterial()).name("§8Uncrafter").build())
+                        .put('Y', new ItemBuilder(Materials.LIME_STAINED_GLASS_PANE.parseMaterial()).name("§a确认分解").lore("", "§c一旦确认分解，操作不可逆.", "", "§7系统将试图将你放进的物品", "§7还原成基础材料.").build())
                         .close(e -> {
                             Player p = (Player) e.getPlayer();
                             Inventory inv = e.getInventory();
@@ -57,18 +58,24 @@ public class UncrafterMenu {
 
                                 if (slot == 'Y') {
                                     List<ItemStack> items = InvUtils.collectItems(inv, 9, 44);
-                                    List<ItemStack> results = RecipesUtils.uncraftItems(items);
+                                    if (items.size() == 0) {
+                                        p.closeInventory();
+                                        TLocale.sendTo(p, "UNCRAFT.EMPTY");
+                                        return;
+                                    }
+
+                                    List<ItemStack> results = RecipesUtils.uncraftItems(items, p.hasPermission("uncrafter.uncraft.enchants"));
 
                                     for (int i = 9; i < 44; i++) {
                                         inv.setItem(i, null);
                                     }
                                     p.closeInventory();
 
-                                    if (InvUtils.getFreeSlots(p.getInventory()) < results.size()) {
+                                    if (Uncrafter.getSettings().getBoolean("UNCRAFT.REQUIRED-FREE-SLOTS") && InvUtils.getFreeSlots(p.getInventory()) < results.size()) {
                                         TLocale.sendTo(p, "UNCRAFT.INV-NO-ROOM", String.valueOf(results.size()), String.valueOf(InvUtils.getFreeSlots(p.getInventory())));
-                                        items.forEach(i -> p.getInventory().addItem(i));
+                                        items.forEach(i -> CronusUtils.addItem(p, i));
                                     } else {
-                                        results.forEach(i -> p.getInventory().addItem(i));
+                                        results.forEach(i -> p.getInventory().addItem(i).values().forEach(item -> p.getWorld().dropItemNaturally(p.getLocation(), item)));
                                         TLocale.sendTo(p, "UNCRAFT.SUCCESS");
                                     }
                                 }
@@ -77,23 +84,6 @@ public class UncrafterMenu {
                         .build()
         );
         TLocale.sendTo(player, "UNCRAFTER-GUI.OPEN");
-    }
-
-
-    public static class MaterialVersion {
-
-        public static Material getGlassPane(String... color) {
-            return UncrafterItem.isNewVersion() ? Material.valueOf(color[0] + "_STAINED_GLASS_PANE") : Material.valueOf("STAINED_GLASS_PANE");
-        }
-
-        public static Material getSign() {
-            return UncrafterItem.isNewVersion() ? Material.valueOf("OAK_SIGN") : Material.valueOf("SIGN");
-        }
-
-        public static Material getClock() {
-            return UncrafterItem.isNewVersion() ? Material.valueOf("CLOCK") : Material.valueOf("WATCH");
-        }
-
     }
 
 }

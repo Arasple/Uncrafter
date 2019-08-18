@@ -2,20 +2,18 @@ package me.arasple.mc.uncrafter;
 
 import io.izzel.taboolib.module.config.TConfig;
 import io.izzel.taboolib.module.inject.TInject;
+import io.izzel.taboolib.module.locale.TLocale;
 import io.izzel.taboolib.module.locale.logger.TLogger;
 import me.arasple.mc.uncrafter.bstats.Metrics;
 import me.arasple.mc.uncrafter.objects.UncrafterItem;
 
 /**
  * @author Arasple
- * <p>
- * Uncrafter 分解者
- * <p>
- * - 分解已合成的物品为配方需求
- * - 强制物品为满耐久
  */
-public final class Uncrafter extends Plugin {
+@UncrafterPlugin.Version(5.03)
+public final class Uncrafter extends UncrafterPlugin {
 
+    @TInject
     private static Uncrafter instance;
     private static UncrafterItem uncrafterItem;
     @TInject("§3L§bChat")
@@ -41,8 +39,6 @@ public final class Uncrafter extends Plugin {
 
     @Override
     public void onStarting() {
-        instance = this;
-
         settings.listener(() -> {
             loadUncrafterItem();
             getTLogger().fine("&7重新载入配置...");
@@ -50,6 +46,8 @@ public final class Uncrafter extends Plugin {
         loadUncrafterItem();
 
         new Metrics(this);
+
+        TLocale.sendToConsole("PLUGIN.ENABLED", getDescription().getVersion());
     }
 
     @Override

@@ -18,9 +18,16 @@ UNCRAFT:
       text: '&6需要空间: &a{0} &8/ &6剩余空间: &3{1}'
     - ==: SOUND
       sound: 'BLOCK_ANVIL_LAND-1-0'
+  EMPTY:
+    - ==: TITLE
+      title: '&c&l分解失败'
+      subtitle: '&7&l待分解物为空'
+    - ==: SOUND
+      sound: 'BLOCK_NOTE_BLOCK_PLING-1-2'
 
 COMMANDS:
   NOT-PLAYER: '&8[&6Uncrafter&8] &c你必须是一个玩家才能执行此操作.'
+  NO-PERMISSION: '&8[&6Uncrafter&8] &c你缺少权限 &6{0} &c执行此操作.'
 
 UNCRAFTER-GUI:
   TITLE: 'Uncrafter 分解系统'
@@ -33,8 +40,9 @@ UNCRAFTER-GUI:
 
 PLUGIN:
   ENABLED: '&8[&6Uncrafter&8] &3启动成功. 当前运行版本: &aVersion {0}'
+  CACHED: '&8[&6Uncrafter&8] &7缓存有效配方表 &a{0} &7个.'
   UPDATE-NOTIFY:
-    LATEST: '&8[&6Uncrafter&8] &a你正在运行最新版的 &6分解者&a.'
+    LATEST: '&8[&6Uncrafter&8] &3你正在运行最新版的 &6分解者&a.'
     HEADER:
       - ''
       - ''

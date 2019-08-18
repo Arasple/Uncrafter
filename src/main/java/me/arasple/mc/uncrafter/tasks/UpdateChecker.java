@@ -7,8 +7,8 @@ import io.izzel.taboolib.internal.apache.lang3.math.NumberUtils;
 import io.izzel.taboolib.module.inject.TListener;
 import io.izzel.taboolib.module.inject.TSchedule;
 import io.izzel.taboolib.module.locale.TLocale;
-import me.arasple.mc.uncrafter.Plugin;
 import me.arasple.mc.uncrafter.Uncrafter;
+import me.arasple.mc.uncrafter.UncrafterPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -53,7 +53,7 @@ public class UpdateChecker implements Listener {
 
         String read;
         try (InputStream inputStream = new URL(URL).openStream(); BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream)) {
-            read = Plugin.readFully(bufferedInputStream, StandardCharsets.UTF_8);
+            read = UncrafterPlugin.readFully(bufferedInputStream, StandardCharsets.UTF_8);
 
             JsonObject json = (JsonObject) new JsonParser().parse(read);
             double latestVersion = json.get("tag_name").getAsDouble();

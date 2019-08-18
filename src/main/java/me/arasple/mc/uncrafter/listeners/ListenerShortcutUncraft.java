@@ -3,6 +3,7 @@ package me.arasple.mc.uncrafter.listeners;
 import com.google.common.collect.Lists;
 import io.izzel.taboolib.module.inject.TListener;
 import io.izzel.taboolib.module.locale.TLocale;
+import io.izzel.taboolib.util.lite.Vectors;
 import me.arasple.mc.uncrafter.Uncrafter;
 import me.arasple.mc.uncrafter.utils.RecipesUtils;
 import org.bukkit.Bukkit;
@@ -45,7 +46,9 @@ public class ListenerShortcutUncraft implements Listener {
         if (Uncrafter.getSettings().getBoolean("UNCRAFT-SHORTCUT.ENABLE") && availables.contains(p.getUniqueId()) && p.isSneaking()) {
             ItemStack drop = e.getItemDrop().getItemStack().clone();
             e.getItemDrop().getItemStack().setAmount(0);
-            RecipesUtils.uncraftItems(drop).forEach(i -> p.getLocation().getWorld().dropItem(p.getLocation(), i));
+
+            List<ItemStack> results = RecipesUtils.uncraftItems(p.hasPermission("uncrafter.uncraft.enchants"), drop);
+            results.forEach(i -> Vectors.itemDrop(p, i, 0.3, 0.35));
             TLocale.sendTo(p, "UNCRAFT.DROP-UNCRAFT");
         }
     }

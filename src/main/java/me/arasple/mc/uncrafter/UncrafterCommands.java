@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  * @author Arasple
  * @date 2019/8/17 17:12
  */
-@BaseCommand(name = "uncrafter", aliases = "ucr", permissionMessage = "uncrafter.admin")
+@BaseCommand(name = "uncrafter", aliases = "ucr")
 public class UncrafterCommands extends BaseMainCommand {
 
     @Override
@@ -37,9 +37,17 @@ public class UncrafterCommands extends BaseMainCommand {
         if (args.length == 1) {
             switch (args[0].toLowerCase()) {
                 case "open":
+                    if (!sender.hasPermission("uncrafter.open")) {
+                        TLocale.sendTo(sender, "COMMANDS.NO-PERMISSION", "uncrafter.open");
+                        return true;
+                    }
                     UncrafterMenu.openFor((Player) sender);
                     break;
                 case "get":
+                    if (!sender.hasPermission("uncrafter.get")) {
+                        TLocale.sendTo(sender, "COMMANDS.NO-PERMISSION", "uncrafter.get");
+                        return true;
+                    }
                     ((Player) sender).getInventory().addItem(Uncrafter.getUncrafterItem().getItem());
                     break;
                 default:

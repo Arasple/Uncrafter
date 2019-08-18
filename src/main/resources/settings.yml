@@ -57,11 +57,23 @@ UNCRAFT:
     # 是否将附魔效果分解为附魔书归还
     RETURN-ENCHANT-BOOKS: true
   # 禁止分解的物品列表
+  # 建议添加一些最基本的材料，防止逆向分解导致BUG
   BLACKLIST:
     # 通过物品材质判断
     MATERIALS:
-      - 'YOUR_MATERIAL'
+      - 'DIAMOND'
+      - 'IRON'
+      - 'GOLD'
+      - 'REDSTONE'
+      - 'LAPIS'
+      - 'COAL'
+      - 'STONE'
+      - 'STICK'
     # 通过物品的Lore判断 (包含)
     LORES:
       - '不可分解'
       - '灵魂绑定'
+  # 是否强制要求背包有足够的空间才能分解
+  # 关闭此项，多余的物品将丢在玩家的位置
+  # （启用可以增强安全性）
+  REQUIRED-FREE-SLOTS: false
