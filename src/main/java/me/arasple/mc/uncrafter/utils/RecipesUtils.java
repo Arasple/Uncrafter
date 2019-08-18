@@ -102,7 +102,7 @@ public class RecipesUtils {
 
     private static boolean fitConditions(ItemStack itemStack) {
         String material = itemStack.getType().name();
-        List<String> lore = itemStack.getLore();
+        List<String> lore = itemStack.hasItemMeta() ? itemStack.getItemMeta().hasLore() ? itemStack.getItemMeta().getLore() : null : null;
 
         if (Uncrafter.getSettings().getBoolean("UNCRAFT.FULL-DURABILITY") && itemStack.getDurability() != 0) {
             return false;

@@ -9,6 +9,7 @@ Version 1.2:
     - 新增对 MerchantRecipe 配方的判断
     - 新增待分解物品为空时的提示TITLE+音效
     - 缓存有效配方表到内存，分解大量物品时速度更快！
+    - 增加 uncrafter.open/uncrafter.get/uncrafter.uncraft.enchants 三个权限节点
 
 Version 1.1:
   Date: 2019.8.17 20:30
