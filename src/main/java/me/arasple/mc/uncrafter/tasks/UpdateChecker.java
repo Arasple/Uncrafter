@@ -74,7 +74,7 @@ public class UpdateChecker implements Listener {
                 }
             } else if (!noticed[0]) {
                 noticed[0] = true;
-                TLocale.sendToConsole("PLUGIN.UPDATE-NOTIFY.LATEST");
+                TLocale.sendToConsole(version > latestVersion ? "PLUGIN.UPDATE-NOTIFY.LATEST" : "PLUGIN.UPDATE-NOTIFY.LATEST");
             }
         } catch (Exception ignored) {
         }

@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
@@ -53,11 +54,11 @@ public class RecipesUtils {
 
                 if (uncraftEnchants && meta.getEnchants().size() > 0 && Uncrafter.getSettings().getBoolean("UNCRAFT.ENCHANTED-ITEMS.RETURN-ENCHANT-BOOKS")) {
                     for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
-                        ItemStack enchatedBook = new ItemStack(Material.ENCHANTED_BOOK);
-                        ItemMeta eMeta = enchatedBook.getItemMeta();
-                        eMeta.addEnchant(entry.getKey(), entry.getValue(), true);
-                        enchatedBook.setItemMeta(eMeta);
-                        results.add(enchatedBook);
+                        ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
+                        EnchantmentStorageMeta eMeta = (EnchantmentStorageMeta) book.getItemMeta();
+                        eMeta.addStoredEnchant(entry.getKey(), entry.getValue(), true);
+                        book.setItemMeta(eMeta);
+                        results.add(book);
                     }
                 }
 
@@ -80,10 +81,7 @@ public class RecipesUtils {
                 results.add(itemStack);
             }
         }
-
-        results = merge(results);
-//        results.forEach(x -> System.out.println("Uncraft " + Items.getName(itemStacks.get(0)) + "; Result: " + Items.getName(x)));
-        return results;
+        return merge(results);
     }
 
     private static List<ItemStack> merge(List<ItemStack> results) {

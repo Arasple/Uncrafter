@@ -10,7 +10,7 @@ import me.arasple.mc.uncrafter.objects.UncrafterItem;
 /**
  * @author Arasple
  */
-@UncrafterPlugin.Version(5.03)
+@UncrafterPlugin.Version(5.04)
 public final class Uncrafter extends UncrafterPlugin {
 
     @TInject

@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class UncrafterMenu {
 
-
     public static void openFor(Player player) {
         player.openInventory(
                 new MenuBuilder(Uncrafter.getInstance())
